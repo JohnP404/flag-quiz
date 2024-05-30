@@ -77,6 +77,7 @@ export default function Home() {
 	useEffect(() => {
 		if (gameStarted) {
 			getRandomCountry();
+			inputRef.current?.focus();
 		} else {
 			setCurrCountry(null);
 			setCountdown(20);
