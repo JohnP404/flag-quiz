@@ -26,22 +26,21 @@ export function Timer() {
 
 	useEffect(() => {
 		if (!gameEnded) return;
-		if (typeof window === undefined) {
-			console.log("the reason for the issue");
-		}
 		const formattedTime = `${time.minutes
 			.toString()
 			.padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}.${
 			time.miliseconds
 		}`;
-		const storedTimes = sessionStorage.getItem("flag-quiz-times");
+		let updatedTimes;
+		const storedTimes = localStorage.getItem("flag-quiz-times");
+
 		if (storedTimes) {
-			const updatedTimes = [...JSON.parse(storedTimes), formattedTime];
-			sessionStorage.setItem(
-				"flag-quiz-times",
-				JSON.stringify(updatedTimes)
-			);
+			updatedTimes = [...JSON.parse(storedTimes), formattedTime];
+		} else {
+			updatedTimes = [formattedTime];
 		}
+
+		localStorage.setItem("flag-quiz-times", JSON.stringify(updatedTimes));
 	}, [gameEnded]);
 
 	return (

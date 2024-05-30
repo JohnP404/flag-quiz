@@ -6,7 +6,7 @@ export default function TimesPage() {
 	const [times, setTimes] = useState<string[]>([]);
 
 	useEffect(() => {
-		const storedTimes = sessionStorage.getItem("flag-quiz-times");
+		const storedTimes = localStorage.getItem("flag-quiz-times");
 		if (storedTimes) setTimes(JSON.parse(storedTimes));
 	}, []);
 
