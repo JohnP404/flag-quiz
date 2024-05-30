@@ -19,9 +19,7 @@ export function Header({ isDarkTheme, setIsDarkTheme }: Props) {
 				</Link>
 				<ul className="flex items-center gap-4">
 					<li>
-						<Link onClick={resetGame} href="/tempos">
-							Tempos
-						</Link>
+						<a href="/tempos">Tempos</a>
 					</li>
 					<li
 						className="cursor-pointer"
