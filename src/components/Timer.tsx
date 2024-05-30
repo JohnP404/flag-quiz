@@ -35,6 +35,7 @@ export function Timer() {
 			time.miliseconds
 		}`;
 		const storedTimes = localStorage.getItem("flag-quiz-times");
+		sessionStorage.setItem("flag-quiz-test", "true");
 		if (storedTimes) {
 			const updatedTimes = [...JSON.parse(storedTimes), formattedTime];
 			localStorage.setItem(
