@@ -28,6 +28,7 @@ export default function Home() {
 	}
 
 	function getRandomCountry() {
+		setCountdown(20);
 		const radInt = getRandomNumber();
 
 		if (!played.includes(radInt)) {
