@@ -43,11 +43,11 @@ export default function Home() {
 
 	function submitHandler(e: FormEvent) {
 		e.preventDefault();
-
 		if (played.length === 196) {
 			endGame();
 			return;
 		}
+
 		if (input.toLowerCase() === currCountry?.name.toLowerCase()) {
 			setAnswer("correct");
 		} else {
@@ -58,6 +58,7 @@ export default function Home() {
 	}
 
 	useEffect(() => {
+		if (gameEnded) return;
 		const interval = setInterval(() => setCountdown(countdown - 1), 1000);
 		if (countdown < 0) {
 			setAnswer("wrong");
