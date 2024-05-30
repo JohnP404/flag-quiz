@@ -1,4 +1,12 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 
 type Time = {
 	minutes: number;
@@ -10,26 +18,50 @@ type Context = {
 	correct: number;
 	wrong: number;
 	time: Time;
-	timerStopped: boolean;
+	gamePaused: boolean;
 	gameEnded: boolean;
-	endGame: () => void;
-	setTimerStopped: (val: boolean) => void;
-	resetGame: () => void;
+	gameStarted: boolean;
+	played: number[];
 	setAnswer: (str: "wrong" | "correct") => void;
+	setPlayed: Dispatch<SetStateAction<number[]>>;
+	pauseGame: Dispatch<SetStateAction<boolean>>;
+	startGame: Dispatch<SetStateAction<boolean>>;
+	endGame: Dispatch<SetStateAction<boolean>>;
+	resetGame: () => void;
 };
 
 const gameContext = createContext<Context | null>(null);
+const start = Date.now();
 
 export function GameContextProvider({ children }: { children: ReactNode }) {
 	const [correct, setCorrect] = useState(0);
 	const [wrong, setWrong] = useState(0);
-	const [timerStopped, stopTimer] = useState(true);
-	const [gameEnded, setGameEnded] = useState(false);
+
+	const [gamePaused, pauseGame] = useState(false);
+	const [gameEnded, endGame] = useState(false);
+	const [gameStarted, startGame] = useState(false);
+
+	const [played, setPlayed] = useState<number[]>([]);
 	const [time, setTime] = useState<Time>({
 		minutes: 0,
 		seconds: 0,
 		miliseconds: 0,
 	});
+
+	const getTime = () => {
+		if (gameEnded || gamePaused || !gameStarted) return;
+		const now = new Date(Date.now() - start);
+		setTime({
+			minutes: now.getMinutes(),
+			seconds: now.getSeconds(),
+			miliseconds: now.getMilliseconds(),
+		});
+	};
+
+	useEffect(() => {
+		const interval = setInterval(getTime, 1);
+		return () => clearInterval(interval);
+	}, [gameEnded, gamePaused, gameStarted]);
 
 	function setAnswer(str: "wrong" | "correct") {
 		if (str === "correct") {
@@ -39,33 +71,31 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
 		}
 	}
 
-	function setTimerStopped(val: boolean) {
-		stopTimer(val);
-	}
-
 	function resetGame() {
+		setPlayed([]);
 		setCorrect(0);
 		setWrong(0);
-		setTimerStopped(true);
+		startGame(false);
+		pauseGame(false);
+		endGame(false);
 		setTime(() => {
 			const newState = { minutes: 0, seconds: 0, miliseconds: 0 };
 			return newState;
 		});
 	}
 
-	function endGame() {
-		stopTimer(true);
-		setGameEnded(true);
-	}
-
 	const value = {
 		correct,
 		wrong,
 		time,
+		gamePaused,
 		gameEnded,
-		timerStopped,
+		gameStarted,
+		played,
+		setPlayed,
+		pauseGame,
 		endGame,
-		setTimerStopped,
+		startGame,
 		resetGame,
 		setAnswer,
 	};

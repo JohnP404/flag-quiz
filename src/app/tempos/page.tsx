@@ -1,11 +1,14 @@
 "use client";
 import { TimeItem } from "@/components/TimeItem";
+import { GameContext } from "@/store/GameContext";
 import { useEffect, useState } from "react";
 
 export default function TimesPage() {
+	const { resetGame } = GameContext();
 	const [times, setTimes] = useState<string[]>([]);
 
 	useEffect(() => {
+		resetGame();
 		const storedTimes = localStorage.getItem("flag-quiz-times");
 		if (storedTimes) setTimes(JSON.parse(storedTimes));
 	}, []);
