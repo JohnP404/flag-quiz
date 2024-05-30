@@ -34,11 +34,10 @@ export function Timer() {
 			.padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}.${
 			time.miliseconds
 		}`;
-		const storedTimes = localStorage.getItem("flag-quiz-times");
-		sessionStorage.setItem("flag-quiz-test", "true");
+		const storedTimes = sessionStorage.getItem("flag-quiz-times");
 		if (storedTimes) {
 			const updatedTimes = [...JSON.parse(storedTimes), formattedTime];
-			localStorage.setItem(
+			sessionStorage.setItem(
 				"flag-quiz-times",
 				JSON.stringify(updatedTimes)
 			);

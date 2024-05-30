@@ -10,7 +10,7 @@ export function TimeItem({ time, setTimes }: Props) {
 	function deleteTime() {
 		setTimes((state) => {
 			const newSate = state.filter((t) => t !== time);
-			localStorage.setItem("flag-quiz-times", JSON.stringify(newSate));
+			sessionStorage.setItem("flag-quiz-times", JSON.stringify(newSate));
 			return newSate;
 		});
 	}
