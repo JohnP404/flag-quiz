@@ -1,3 +1,5 @@
+"use client";
+
 import { GameContext } from "@/store/GameContext";
 import { useEffect, useState } from "react";
 
@@ -5,7 +7,6 @@ const start = Date.now();
 
 export function Timer() {
 	const { timerStopped, time: timer, gameEnded } = GameContext();
-
 	const [time, setTime] = useState(timer);
 
 	const getTime = () => {
