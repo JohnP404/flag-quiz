@@ -31,7 +31,7 @@ type Context = {
 };
 
 const gameContext = createContext<Context | null>(null);
-const start = Date.now();
+let start = Date.now();
 
 export function GameContextProvider({ children }: { children: ReactNode }) {
 	const [correct, setCorrect] = useState(0);
@@ -51,6 +51,7 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
 	const getTime = () => {
 		if (gameEnded || gamePaused || !gameStarted) return;
 		const now = new Date(Date.now() - start);
+
 		setTime({
 			minutes: now.getMinutes(),
 			seconds: now.getSeconds(),
@@ -82,6 +83,7 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
 			const newState = { minutes: 0, seconds: 0, miliseconds: 0 };
 			return newState;
 		});
+		start = Date.now();
 	};
 
 	const value = {
