@@ -27,43 +27,48 @@ export default function Home() {
 	const countries = countryData.countries;
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	function getRandomNumber() {
-		return Math.floor(Math.random() * (countries.length - 0) + 0);
-	}
+	const getRandomNumber = () =>
+		Math.floor(Math.random() * (countries.length - 0) + 0);
 
-	function getRandomCountry() {
+	const getRandomCountry = () => {
 		setCountdown(20);
-		const radInt = getRandomNumber();
+		const randomIdx = getRandomNumber();
 
-		if (!played.includes(radInt)) {
-			setPlayed((state: any) => [...state, radInt]);
+		if (!played.includes(randomIdx)) {
 			setCurrCountry({
-				name: countries[radInt].name,
-				flag: countries[radInt].flag,
+				name: countries[randomIdx].name,
+				flag: countries[randomIdx].flag,
 			});
+			setPlayed((previous: number[]) => [...previous, randomIdx]);
 		} else {
 			getRandomCountry();
 		}
-	}
+	};
 
-	function submitHandler(e: FormEvent) {
-		e.preventDefault();
+	const handleSubmit = (event: FormEvent) => {
+		event.preventDefault();
+		if (gameEnded) return;
+
+		const isCorrect =
+			input.toLowerCase() === currCountry?.name.toLowerCase();
+
+		setAnswer(isCorrect ? "correct" : "wrong");
+
 		if (played.length === 196) {
 			endGame(true);
 			return;
 		}
-		if (input.toLowerCase() === currCountry?.name.toLowerCase()) {
-			setAnswer("correct");
-		} else {
-			setAnswer("wrong");
+
+		if (gamePaused) {
+			pauseGame(false);
 		}
-		if (gamePaused) pauseGame(false);
+
 		setInput("");
 		getRandomCountry();
-	}
+	};
 
 	useEffect(() => {
-		if (gamePaused || !gameStarted) return;
+		if (gamePaused || !gameStarted || gameEnded) return;
 		const interval = setInterval(() => setCountdown(countdown - 1), 1000);
 		if (countdown < 0) {
 			setAnswer("wrong");
@@ -72,7 +77,7 @@ export default function Home() {
 			setCountdown(20);
 		}
 		return () => clearInterval(interval);
-	}, [countdown, gamePaused, gameStarted]);
+	}, [gamePaused, gameEnded, gameStarted]);
 
 	useEffect(() => {
 		if (gameStarted) {
@@ -95,9 +100,15 @@ export default function Home() {
 					<Timer />
 				</div>
 				<ScoresBoard />
-				<span>
-					{gameEnded ? "Parabéns!" : `Faltam: ${196 - played.length}`}
-				</span>
+				{gameStarted ? (
+					<span>
+						{gameEnded
+							? "Parabéns!"
+							: `Faltam: ${197 - played.length}`}
+					</span>
+				) : (
+					<span className="w-[87.25px]"></span>
+				)}
 			</div>
 			<div className="min-w-[300px] grid gap-8">
 				<figure className="h-[200px] flex justify-center">
@@ -110,8 +121,9 @@ export default function Home() {
 						/>
 					)}
 				</figure>
-				<form className="grid" onSubmit={submitHandler}>
+				<form className="grid" onSubmit={handleSubmit}>
 					<Input
+						disabled={!gameStarted}
 						ref={inputRef}
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
