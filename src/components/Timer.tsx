@@ -1,10 +1,10 @@
 "use client";
 
 import { GameContext } from "@/store/GameContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export function Timer() {
-	const { gameEnded, gameStarted, gamePaused, time } = GameContext();
+	const { gameEnded, time } = GameContext();
 
 	useEffect(() => {
 		if (!gameEnded) return;

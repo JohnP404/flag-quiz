@@ -63,15 +63,15 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
 		return () => clearInterval(interval);
 	}, [gameEnded, gamePaused, gameStarted]);
 
-	function setAnswer(str: "wrong" | "correct") {
+	const setAnswer = (str: "wrong" | "correct") => {
 		if (str === "correct") {
 			setCorrect(correct + 1);
 		} else {
 			setWrong(wrong + 1);
 		}
-	}
+	};
 
-	function resetGame() {
+	const resetGame = () => {
 		setPlayed([]);
 		setCorrect(0);
 		setWrong(0);
@@ -82,7 +82,7 @@ export function GameContextProvider({ children }: { children: ReactNode }) {
 			const newState = { minutes: 0, seconds: 0, miliseconds: 0 };
 			return newState;
 		});
-	}
+	};
 
 	const value = {
 		correct,

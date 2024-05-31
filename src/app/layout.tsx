@@ -1,5 +1,6 @@
 "use client";
 
+import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { useEffect, useState } from "react";
@@ -31,6 +32,7 @@ export default function RootLayout({
 						setIsDarkTheme={setIsDarkTheme}
 					/>
 					{children}
+					<Analytics />
 				</GameContextProvider>
 			</body>
 		</html>
