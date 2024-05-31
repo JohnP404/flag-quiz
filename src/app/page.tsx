@@ -77,7 +77,7 @@ export default function Home() {
 			setCountdown(20);
 		}
 		return () => clearInterval(interval);
-	}, [gamePaused, gameEnded, gameStarted]);
+	}, [countdown, gamePaused, gameEnded, gameStarted]);
 
 	useEffect(() => {
 		if (gameStarted) {
